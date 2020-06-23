@@ -1,0 +1,44 @@
+---
+# vars file for createigns
+
+ign_directory: /home/vagrant/ocp4
+output_directory: /home/vagrant/ignition/roles/createigns/files 
+
+webserver: 10.80.158.5:8080
+
+netmask: 255.255.255.240
+cidr: 28
+gateway: 10.80.158.1
+dns: 10.80.158.5
+domain: jftest.com
+
+cluster_name: ocp4
+
+bootstrap:
+  - hostname: bootstrap.ocp4.jftest.com
+    ip: 10.80.158.6
+
+nodes: 
+  - hostname: master0.ocp4.jftest.com
+    ip: 10.80.158.7
+    function: master
+
+  - hostname: master1.ocp4.jftest.com
+    ip: 10.80.158.8
+    function: master
+
+  - hostname: master2.ocp4.jftest.com
+    ip: 10.80.158.9
+    function: master
+
+  - hostname: worker0.ocp4.jftest.com
+    ip: 10.80.158.10
+    function: worker
+
+  - hostname: worker1.ocp4.jftest.com
+    ip: 10.80.158.11
+    function: worker
+
+  - hostname: worker2.ocp4.jftest.com
+    ip: 10.80.158.12
+    function: worker
