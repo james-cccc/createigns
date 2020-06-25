@@ -1,7 +1,7 @@
 ---
 # tasks file for createigns
 
-- name: Create output directories 
+- name: Create output directories
   file:
     path: "{{ item }}"
     state: directory
@@ -11,34 +11,42 @@
     - "{{ output_directory }}/ifcfgs"
     - "{{ output_directory }}/b64ignitions"
 
-- name: Generate nodes network configuration files 
-  template: src=ifcfg-ens192.j2 dest={{role_path}}/files/ifcfgs/{{item.hostname}}.ifcfg
+- name: Generate nodes network configuration files
+  template:
+    src: ifcfg-ens192.j2
+    dest: "{{role_path}}/files/ifcfgs/{{item.hostname}}.ifcfg"
   with_items: "{{ nodes }}"
 
-- name: Generate bootstrap network configuration file 
-  template: src=ifcfg-ens192.j2 dest={{role_path}}/files/ifcfgs/{{item.hostname}}.ifcfg
+- name: Generate bootstrap network configuration file
+  template:
+    src: ifcfg-ens192.j2
+    dest: "{{role_path}}/files/ifcfgs/{{item.hostname}}.ifcfg"
   with_items: "{{ bootstrap }}"
 
 - name: Get base64 encoded CA string
   command: grep -oP 'base64,\K[^"]+' {{ ign_directory }}/master.ign
   register: base64castring
 
-- name: Generate nodes modified ignition files 
-  template: src=node-ign.j2 dest={{role_path}}/files/ignitions/{{item.hostname}}.ign
+- name: Generate nodes modified ignition files
+  template:
+    src: node-ign.j2
+    dest: "{{role_path}}/files/ignitions/{{item.hostname}}.ign"
   with_items: "{{ nodes }}"
 
 - name: Generate bootstrap modified ignition file
-  template: src=append-bootstrap-ign.j2 dest={{role_path}}/files/ignitions/{{item.hostname}}.ign
+  template:
+    src: append-bootstrap-ign.j2
+    dest: "{{role_path}}/files/ignitions/{{item.hostname}}.ign"
   with_items: "{{ bootstrap }}"
 
 - name: Create nodes base64 encoded versions of the modified ignition files
   copy:
     content: "{{ lookup('file', '{{ output_directory }}/ignitions/{{item.hostname}}.ign') | b64encode }}"
-    dest: "{{ output_directory }}/b64ignitions/{{ item.hostname }}.64" 
+    dest: "{{ output_directory }}/b64ignitions/{{ item.hostname }}.64"
   with_items: "{{ nodes }}"
 
 - name: Create bootstrap base64 encoded versions of the modified ignition file
   copy:
     content: "{{ lookup('file', '{{ output_directory }}/ignitions/{{item.hostname}}.ign') | b64encode }}"
-    dest: "{{ output_directory }}/b64ignitions/{{ item.hostname }}.64" 
+    dest: "{{ output_directory }}/b64ignitions/{{ item.hostname }}.64"
   with_items: "{{ bootstrap }}"
