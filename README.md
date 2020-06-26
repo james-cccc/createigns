@@ -3,6 +3,10 @@ Ansible Role: CreateIgns
 
 This role was put together to help assist performing Openshift 4 deployments on VMWare ESXi where static IPs are required but where DHCP is allowed to give out temporary addresses. The role creates a base64 encoded ignition file for each Red Hat CoreOS server that contains the static specific IP and network configuration as required. 
 
+I have also started to put together another role which will not only create the new ignition files but then provision the VMs as well. I've validated that this works with an ESXi instance hosted on Packet.
+
+https://github.com/james-cccc/ocp_modign_ova_deploy
+
 Requirements
 ------------
 
